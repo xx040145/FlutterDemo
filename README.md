@@ -23,6 +23,7 @@ pod install
 in the .h file
 ```
 #import <Flutter/Flutter.h>
+#import <FlutterPluginRegistrant/GeneratedPluginRegistrant.h>
 
 @property (nonatomic, strong) FlutterEngine *flutterEngine;
 ```
@@ -32,6 +33,7 @@ method add
 ```
 FlutterEngine *flutterEngine = [[FlutterEngine alloc] initWithName:@"testToFlutter"];
 [flutterEngine runWithEntrypoint:nil];
+[GeneratedPluginRegistrant registerWithRegistry:flutterEngine];
 ```
 open flutter viewcontroller
 ```
@@ -45,7 +47,7 @@ flutterVC.navigationController.navigationBarHidden = YES;
   dio: ^4.0.6
   flutter_easyloading: ^3.0.3
   easy_refresh: ^3.0.4+2
-  image_picker_iOS: ^0.8.5+3 //(not use yet)
+  image_picker_iOS: ^0.8.5+3
   fl_chart: ^0.55.1 //(not use yet)
 ```
 ## Getting Started
