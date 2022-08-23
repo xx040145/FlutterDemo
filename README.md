@@ -109,6 +109,23 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), di
     callback(@"返回flutter端的数据");
 }];
 ```
+## event_bus
+in event_bus.dart file,create an instance of EventBus.
+in tabbar.dart file
+```
+    //订阅eventbus
+    eventBus.on<TabbatIndexEvent>().listen((event) {
+      int tabbatIndex = event.tabbatIndex;
+      // print('tabbatIndex:$tabbatIndex');
+      onTap(tabbatIndex);
+    });
+```
+in chat_listview_controller.dart file
+```
+    //发送订阅消息
+    eventBus.fire(TabbatIndexEvent(4));
+```
+
 
 ## dependencies in the pubspec.yaml
 ```
@@ -116,6 +133,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), di
   flutter_easyloading: ^3.0.3
   easy_refresh: ^3.0.4+2
   image_picker_iOS: ^0.8.5+3
+  event_bus: ^2.0.0
   fl_chart: ^0.55.1 //(not use yet)
 ```
 ## Getting Started
