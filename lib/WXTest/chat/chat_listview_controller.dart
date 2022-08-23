@@ -6,6 +6,8 @@ import 'chat_listview.dart';
 import '../Service/service.dart';
 import 'chat_list_entity.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:event_bus/event_bus.dart';
+import '../event_bus.dart';
 
 class ChatController extends StatefulWidget {
   const ChatController({Key? key}) : super(key: key);
@@ -19,19 +21,17 @@ class ChatController extends StatefulWidget {
 class ChatWidget extends State<ChatController>
     with AutomaticKeepAliveClientMixin {
   //1.初始化 EasyRefreshController
-  late EasyRefreshController _controller;
-  GlobalKey<ChatWidget> widgetKey = GlobalKey();
+  final EasyRefreshController _controller = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
 
+  var pageIndex = 0;
   List<ChatListChatList> dataList = [];
   @override
   void initState() {
     super.initState();
-    _controller = EasyRefreshController(
-      controlFinishRefresh: true,
-      controlFinishLoad: true,
-    );
-
-    receiveMessage();
+    // receiveMessage();
   }
   //4.释放refresh的controller
   @override
@@ -41,10 +41,9 @@ class ChatWidget extends State<ChatController>
   }
   void receiveMessage() {
     messageChannel.setMessageHandler((message) async {
-      print('message: $message');
       _controller.callRefresh();
       setState(() {
-        dataList = dataList;
+
       });
       return '返回Native端的数据';
     });
@@ -54,13 +53,17 @@ class ChatWidget extends State<ChatController>
     EasyLoading.dismiss();
     Map<String, dynamic> map = json.decode(jsonString);
     var data = new ChatListEntity.fromJson(map);
+    //因为native跳转过来的时候tabbar的pageView有问题，所以执行一次假跳转
+    //发送订阅消息
+    eventBus.fire(TabbatIndexEvent(4));
+    eventBus.fire(TabbatIndexEvent(0));
+
     _controller.finishRefresh();
     _controller.finishLoad();
     //3.请求完成后，结束刷新状态
     setState(() {
-      if(dataList.length != 0){
+      if(pageIndex != 0){
         dataList.addAll(data.chatList);
-        // _controller.
       }else {
         dataList = data.chatList;
       }
@@ -87,13 +90,16 @@ class ChatWidget extends State<ChatController>
           refreshOnStartHeader: const ClassicHeader(
 
         ),
+        //   header: const ClassicHeader(),
         footer: const ClassicFooter(),
         onRefresh: () async {
           EasyLoading.show(status: '加载中');
+          pageIndex = 0;
           getChatData().then((value) => makeMethod(value));
         },
         onLoad: () async {
           EasyLoading.show(status: '加载中');
+          pageIndex++;
           getChatData().then((value) => makeMethod(value));
         },
           //child 主体view

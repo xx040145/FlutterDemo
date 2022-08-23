@@ -6,6 +6,7 @@ import 'mine_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'paint_page.dart';
 import 'animate_page.dart';
+import '../event_bus.dart';
 
 class MineController extends StatefulWidget {
   const MineController({Key? key}) : super(key: key);
@@ -81,6 +82,7 @@ class MineWidget extends State<MineController>
   Future<String> sendMessage() async {
     Object? reply = await messageChannel.send('backToNative');
     print('reply: $reply');
+    eventBus.fire(TabbatIndexEvent(0));
     return reply.toString();
   }
 

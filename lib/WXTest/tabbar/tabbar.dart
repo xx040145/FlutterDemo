@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:event_bus/event_bus.dart';
+import '../event_bus.dart';
+
 import '../friends/friends_controller.dart';
 import '../chat/chat_listview_controller.dart';
 import '../discover/discover_controller.dart';
@@ -31,6 +34,18 @@ class TabbarViewState extends State<Tabbar> {
   //第一步：创建PageController 并制定初始选中页面
   final PageController _controller = PageController(initialPage: 0); // 页面控制器
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    //订阅eventbus
+    eventBus.on<TabbatIndexEvent>().listen((event) {
+      int tabbatIndex = event.tabbatIndex;
+      // print('tabbatIndex:$tabbatIndex');
+      onTap(tabbatIndex);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

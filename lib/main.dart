@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         highlightColor: const Color.fromRGBO(1, 0, 0, 0.0),
         splashColor: const Color.fromRGBO(1, 0, 0, 0.0),
       ),
-      home: const Tabbar(),
+      home: Tabbar(),
       builder: EasyLoading.init(),
     );
   }
