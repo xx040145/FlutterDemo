@@ -19,16 +19,19 @@ class ChatController extends StatefulWidget {
 class ChatWidget extends State<ChatController>
     with AutomaticKeepAliveClientMixin {
   //1.初始化 EasyRefreshController
-  EasyRefreshController _controller = EasyRefreshController(
-    controlFinishRefresh: true,
-    controlFinishLoad: true,
-  );
+  late EasyRefreshController _controller;
+  GlobalKey<ChatWidget> widgetKey = GlobalKey();
+
   List<ChatListChatList> dataList = [];
   @override
   void initState() {
     super.initState();
-    EasyLoading.show(status: '加载中');
-    getChatData().then((value) => makeMethod(value));
+    _controller = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+
+    receiveMessage();
   }
   //4.释放refresh的controller
   @override
@@ -36,15 +39,28 @@ class ChatWidget extends State<ChatController>
     _controller.dispose();
     super.dispose();
   }
+  void receiveMessage() {
+    messageChannel.setMessageHandler((message) async {
+      print('message: $message');
+      _controller.callRefresh();
+      setState(() {
+        dataList = dataList;
+      });
+      return '返回Native端的数据';
+    });
+  }
 
   void makeMethod(String jsonString) {
     EasyLoading.dismiss();
     Map<String, dynamic> map = json.decode(jsonString);
     var data = new ChatListEntity.fromJson(map);
-    _controller.finishRefresh(); //3.请求完成后，结束刷新状态
+    _controller.finishRefresh();
+    _controller.finishLoad();
+    //3.请求完成后，结束刷新状态
     setState(() {
       if(dataList.length != 0){
         dataList.addAll(data.chatList);
+        // _controller.
       }else {
         dataList = data.chatList;
       }
@@ -67,7 +83,8 @@ class ChatWidget extends State<ChatController>
       //2.body添加EasyRefresh，设置头部底部，设置请求方法
       body: EasyRefresh(
         controller: _controller,
-        header: const ClassicHeader(
+          refreshOnStart: true,
+          refreshOnStartHeader: const ClassicHeader(
 
         ),
         footer: const ClassicFooter(),
@@ -80,7 +97,7 @@ class ChatWidget extends State<ChatController>
           getChatData().then((value) => makeMethod(value));
         },
           //child 主体view
-        child: ChatView(dataList:dataList,cellSelectBlock: (index){
+        child:ChatView(dataList:dataList,cellSelectBlock: (index){
           print('点击了${index}的cell');
         })
       ));

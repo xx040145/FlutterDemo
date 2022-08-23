@@ -36,6 +36,12 @@ class MineWidget extends State<MineController>
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return MineView(datas: data,headerSelectBlock: (){
@@ -66,10 +72,16 @@ class MineWidget extends State<MineController>
                   AnimatePage()));
           break;
         default:
-
+          sendMessage();
           break;
       }
     },);
+  }
+
+  Future<String> sendMessage() async {
+    Object? reply = await messageChannel.send('backToNative');
+    print('reply: $reply');
+    return reply.toString();
   }
 
   @override
