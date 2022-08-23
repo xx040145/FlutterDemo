@@ -3,11 +3,11 @@
 A new Flutter module project.Can run in the Simulator singly,or run in a iOS app.
 Before all,we need flutter environment and IDE firstly.
 
-# use singly
+## use singly
 
 Open the project with your develop IDE(Visual Studio Code,or Android Studio), then open the Simulator(like iPhone13), run the lib/main.dart file.
 
-# use in a iOS app
+## use in a iOS app
 
 add in Podfile.
 ```
@@ -40,13 +40,14 @@ flutterVC.navigationController.navigationBarHidden = YES;
 [self.navigationController pushViewController:flutterVC animated:YES];
 ```
 
-# dependencies in the pubspec.yaml
+## dependencies in the pubspec.yaml
+```
   dio: ^4.0.6
   flutter_easyloading: ^3.0.3
   easy_refresh: ^3.0.4+2
-  image_picker_iOS: ^0.8.5+3 //(not use)
-  fl_chart: ^0.55.1 //(not use)
-
+  image_picker_iOS: ^0.8.5+3 //(not use yet)
+  fl_chart: ^0.55.1 //(not use yet)
+```
 ## Getting Started
 
 For help getting started with Flutter development, view the online
