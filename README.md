@@ -139,17 +139,18 @@ class TabbatIndexEvent {
 ```
 in tabbar.dart file
 ```
-    //订阅eventbus
-    eventBus.on<TabbatIndexEvent>().listen((event) {
-      int tabbatIndex = event.tabbatIndex;
-      // print('tabbatIndex:$tabbatIndex');
-      onTap(tabbatIndex);
-    });
+import '../event_bus.dart';
+//订阅eventbus
+eventBus.on<TabbatIndexEvent>().listen((event) {
+  int tabbatIndex = event.tabbatIndex;
+  // print('tabbatIndex:$tabbatIndex');
+  onTap(tabbatIndex);
+});
 ```
 in chat_listview_controller.dart file
 ```
-    //发送订阅消息
-    eventBus.fire(TabbatIndexEvent(4));
+//发送订阅消息
+eventBus.fire(TabbatIndexEvent(4));
 ```
 
 
