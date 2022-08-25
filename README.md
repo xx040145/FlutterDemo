@@ -125,6 +125,18 @@ in the .m file
 ```
 ## event_bus
 in event_bus.dart file,create an instance of EventBus.
+```
+import 'package:event_bus/event_bus.dart';
+// 创建EventBus实例
+EventBus eventBus = EventBus();
+
+// Event
+class TabbatIndexEvent {
+  int tabbatIndex;
+
+  TabbatIndexEvent(this.tabbatIndex);
+}
+```
 in tabbar.dart file
 ```
     //订阅eventbus
