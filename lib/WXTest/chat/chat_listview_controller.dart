@@ -31,7 +31,7 @@ class ChatWidget extends State<ChatController>
   @override
   void initState() {
     super.initState();
-    // receiveMessage();
+    receiveMessage();
   }
   //4.释放refresh的controller
   @override
@@ -41,11 +41,19 @@ class ChatWidget extends State<ChatController>
   }
   void receiveMessage() {
     messageChannel.setMessageHandler((message) async {
-      _controller.callRefresh();
-      setState(() {
+      print(message);
+      if(message == 'loadOnce'){
+        _controller.callRefresh();
+        //发送订阅消息
+        eventBus.fire(TabbatIndexEvent(4));
+        eventBus.fire(TabbatIndexEvent(0));
+        return '返回Native端的数据';
+      }else {
+        setState(() {
 
-      });
-      return '返回Native端的数据';
+        });
+        return '返回Native端的数据';
+      }
     });
   }
 
